@@ -11,4 +11,10 @@ public class Stats {
 
 	public Stats() {}
 
+	public String print() {
+	
+		String retString = "checkinsCount: " + checkinsCount + ", usersCount: " + usersCount + "\ntipCount: " + tipCount;
+		return retString;
+	
+	}
 }

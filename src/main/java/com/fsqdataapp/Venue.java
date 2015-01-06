@@ -11,6 +11,13 @@ public class Venue {
     public List<Category> categories = new ArrayList<Category>();
     public Location location = new Location();
     public Stats stats = new Stats();
+    public String url;
+    public float rating;
+    public String ratingColor;
+    public long ratingSignals;
+    public Hours hours = new Hours();
+    public Photos photos = new Photos();
+
 
     public Venue() {} // There must be a no-arg constructor
 
@@ -27,7 +34,7 @@ public class Venue {
            retString = retString + category.print()+"\n";
         }
 
-        retString = retString + location.print();
+        retString = retString + location.print() + "\n" + stats.print() + "\n" + url + "\n" + ratingColor + "\n" + ratingSignals + "\n" + hours.print() + "\n" + photos.print();
 
         return retString+"\n===================================\n";
 

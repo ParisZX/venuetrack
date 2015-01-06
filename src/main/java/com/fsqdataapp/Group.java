@@ -18,5 +18,17 @@ public class Group {
 
 		return retString;
 
+    }
+
+    public String printPhoto() {
+
+    	String retString = "";
+
+    	for (Item item : items) {
+ 		   retString = retString + item.printPhoto()+"\n\n";
+		}
+
+		return retString;
+
     }	
 }
