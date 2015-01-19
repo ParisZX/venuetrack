@@ -13,7 +13,7 @@ public class Photos {
     	String retString = "";
 
     	for (Group group : groups) {
- 		   retString = retString + group.printPhoto()+"\n\n";
+ 		   retString = retString + group.printPhoto();
 		}
 
 		return retString;

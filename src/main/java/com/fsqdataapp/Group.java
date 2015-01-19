@@ -25,7 +25,7 @@ public class Group {
     	String retString = "";
 
     	for (Item item : items) {
- 		   retString = retString + item.printPhoto()+"\n\n";
+ 		   retString = retString + item.printPhoto();
 		}
 
 		return retString;
