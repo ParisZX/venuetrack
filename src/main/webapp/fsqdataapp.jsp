@@ -12,9 +12,9 @@
 
 <body>
 
-<% Car d = ofy().load().type(Car.class).id("123123").now(); %>
+<% //Car d = ofy().load().type(Car.class).id("123123").now(); %>
 
-<h3><%= d.id %></h3>
+<h3><%//= d.id %></h3>
 
 </body>
 </html>

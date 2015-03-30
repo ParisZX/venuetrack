@@ -1,10 +1,12 @@
 package com.fsqdataapp;
 
+import com.googlecode.objectify.annotation.*;
 import java.util.*;
 
-public class Venue {
+@Entity
+public class VtVenue {
     
-    public String id; // Can be Long -if null then autogenerates-, long, or String
+    @Id public String id; // Can be Long -if null then autogenerates-, long, or String
     public String name;
     public List<Category> categories = new ArrayList<Category>();
     public Location location = new Location();
@@ -14,10 +16,13 @@ public class Venue {
     public String ratingColor;
     public long ratingSignals;
     public Hours hours = new Hours();
-    public Photos photos = new Photos();
+    public String photo;
 
+    public VtVenue() {} // There must be a no-arg constructor
 
-    public Venue() {} // There must be a no-arg constructor
+    public VtVenue(String photo) {
+        this.photo = photo;
+    }
 
     public String print() {
 
@@ -27,7 +32,9 @@ public class Venue {
            retString = retString + category.print()+"\n";
         }
 
-        retString = retString + location.print() + "\n" + stats.print() + "\n" + url + "\n" + ratingColor + "\n" + ratingSignals + "\n" + hours.print() + "\n" + photos.print();
+        String photoPrint;
+
+        retString = retString + location.print() + "\n" + stats.print() + "\n" + url + "\n" + ratingColor + "\n" + ratingSignals + "\n" + hours.print() + "\n" + photo;
 
         return retString+"\n===================================\n";
 

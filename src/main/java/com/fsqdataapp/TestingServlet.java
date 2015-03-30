@@ -13,26 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class TestingServlet extends HttpServlet {
   @Override
-  public void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws IOException {
-    if (req.getParameter("testing") == null) {
+  public void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
+    
+    response.setContentType("text/plain");
+    response.setCharacterEncoding("UTF-8");
 
-      resp.setContentType("text/plain");
-      resp.getWriter().println("Hello, this is a testing servlet. \n\n");
-      
-      ofy().save().entity(new Venue("123123", "red")).now();
-	    Venue c = ofy().load().type(Venue.class).id("123123").now();
-	    resp.setContentType("text/plain");
-      resp.getWriter().println(c.id);
-    } 
-    else {
-
-		Venue d = ofy().load().type(Venue.class).id("123123").now();
-		resp.setContentType("text/plain");
-    	resp.getWriter().println(d.id);	
-
-		//ofy().delete().entity(c);
-		      	  
-    }
+    VtVenue test = ofy().load().type(VtVenue.class).id("4bd9a4d1d2cbc928b330d1ad").now();
+    response.getWriter().println(test.print());	
+    
   }
 }
