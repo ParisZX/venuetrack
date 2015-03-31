@@ -22,14 +22,6 @@
         <servlet-name>testing</servlet-name>
         <servlet-class>com.fsqdataapp.TestingServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>source</servlet-name>
-        <servlet-class>com.fsqdataapp.SourceServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>target</servlet-name>
-        <servlet-class>com.fsqdataapp.TargetServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>fsqdataapp</servlet-name>
         <url-pattern>/fsqdataapp</url-pattern>
@@ -37,14 +29,6 @@
     <servlet-mapping>
         <servlet-name>testing</servlet-name>
         <url-pattern>/testing</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>source</servlet-name>
-        <url-pattern>/source</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>target</servlet-name>
-        <url-pattern>/target</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>fsqdataapp.jsp</welcome-file>

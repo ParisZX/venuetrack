@@ -11,7 +11,7 @@ public class Icon {
 	
 	public String print() {
 
-    	return "<img src=" + prefix + suffix +"/>";
+    	return prefix + suffix;
 
     }
 

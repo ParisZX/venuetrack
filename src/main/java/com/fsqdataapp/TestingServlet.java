@@ -4,22 +4,36 @@ import com.googlecode.objectify.*;
 
 import static com.fsqdataapp.OfyService.ofy;
 
-import java.io.IOException;
-import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.*;
 
 public class TestingServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
     
-    response.setContentType("text/plain");
+    response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
-    VtVenue test = ofy().load().type(VtVenue.class).id("4bd9a4d1d2cbc928b330d1ad").now();
-    response.getWriter().println(test.print());	
+    String testId = req.getParameter("id");
+
+	  List<VtVenue> venues = ofy().load().type(VtVenue.class).filter("lat >", 0).list();
+
+    //for (VtVenue venue : venues) {
+      
+      // convert java object to JSON format,
+      // and returned as JSON formatted string
+      Gson gson = new Gson();
+      String json = gson.toJson(venues);
+ 	
+      response.getWriter().println(json);	
+    
+
+    System.out.println(venues.size());    	
     
   }
 }
