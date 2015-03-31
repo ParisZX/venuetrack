@@ -27,13 +27,20 @@ public class FsqdataappServlet extends HttpServlet {
     // Initialize conn with Foursquare
     Random rand = new Random();
 
+    // Initialize the filters used in the Foursquare Endpoints request url
     double latitude = (rand.nextDouble() - 0.5) + 40.6372645; 
     double longitude = (rand.nextDouble()/5 - 0.1) + 22.9374991;
-    String limit = "50";
+    int price = rand.nextInt(4); int limit = 1; int venuePhotos = 1;
 
-    System.out.println(latitude + " " + longitude);
+    // Prepare the filters string
+    String filters = "ll=" + latitude + "," + longitude + "&limit=" + limit + "&venuePhotos=" + venuePhotos;
+    if (price>0)
+       filters = filters + "&price=" + price;
 
-    URL url = new URL("https://api.foursquare.com/v2/venues/explore?ll=" + latitude + "," + longitude + "&limit=" + limit + "&venuePhotos=1&oauth_token=C0G5VFZ3V44UFHAIMSDW20ER0CEPWEBTYCJWCCV0M0FO0CHO&v=20141224");
+    // Authentication Token needed by Foursquare
+    String token = "&oauth_token=C0G5VFZ3V44UFHAIMSDW20ER0CEPWEBTYCJWCCV0M0FO0CHO&v=20141224";
+
+    URL url = new URL("https://api.foursquare.com/v2/venues/explore?" + filters + token);
     URLConnection urlConn = url.openConnection();
 
     // The venues data is the response wanted
@@ -41,10 +48,6 @@ public class FsqdataappServlet extends HttpServlet {
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
     
-    // Gets the response (JSON)
-    Object content = urlConn.getContent();
-    String contentType = urlConn.getContentType();
-      
     // Reads the response and prepares to write output
     BufferedReader cgiOutput = new BufferedReader(new InputStreamReader(urlConn.getInputStream(),"UTF-8"));
     PrintWriter servletOutput = response.getWriter();
@@ -80,6 +83,24 @@ public class FsqdataappServlet extends HttpServlet {
 
       // print it inside the servlet content
       servletOutput.println(vtVenue.print());
+
+      // let's get the tips for each venue. First, prepare the request url for foursquare
+      URL tipsUrl = new URL("https://api.foursquare.com/v2/venues/" + vtVenue.id + "/tips?sort=recent&limit=100"+token);
+      URLConnection tipsUrlConn = tipsUrl.openConnection();
+      
+      // then, we read the contents of the output
+      BufferedReader tipsOutput = new BufferedReader(new InputStreamReader(tipsUrlConn.getInputStream(),"UTF-8"));
+      
+      // and finally, using gson we make our raw data into objects
+      JSONObject newObj = gson.fromJson(tipsOutput, JSONObject.class);
+      List<Tip> tips = new ArrayList<Tip>();
+      tips = newObj.response.tips.items;
+      
+      for (Tip tip : tips) {
+        // save the tip
+        ofy().save().entity(tip).now();
+        servletOutput.println(tip.print());  
+      }
     }
 
     // Close the output session

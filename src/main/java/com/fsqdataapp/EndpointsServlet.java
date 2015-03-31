@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.*;
 
-public class TestingServlet extends HttpServlet {
+public class EndpointsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
     

@@ -19,16 +19,16 @@
         <servlet-class>com.fsqdataapp.FsqdataappServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>testing</servlet-name>
-        <servlet-class>com.fsqdataapp.TestingServlet</servlet-class>
+        <servlet-name>endpoints</servlet-name>
+        <servlet-class>com.fsqdataapp.EndpointsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>fsqdataapp</servlet-name>
         <url-pattern>/fsqdataapp</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>testing</servlet-name>
-        <url-pattern>/testing</url-pattern>
+        <servlet-name>endpoints</servlet-name>
+        <url-pattern>/endpoints</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>fsqdataapp.jsp</welcome-file>

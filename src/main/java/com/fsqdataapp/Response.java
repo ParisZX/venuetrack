@@ -5,7 +5,8 @@ import java.util.*;
 public class Response {
 
 	public List<Group> groups = new ArrayList<Group>();
-
+	public AllTips tips = new AllTips();
+	
     public Response() {}
     
     public String print() {

@@ -4,7 +4,9 @@ import java.util.*;
 
 public class Item {
 
-	public Venue venue = new Venue();
+	public Venue venue = new Venue(); 
+
+	// This is used for photos
 	public String prefix, suffix;
 	public long width, height;
 

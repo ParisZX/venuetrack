@@ -7,6 +7,7 @@ import static com.googlecode.objectify.ObjectifyService.*;
 public class OfyService {
     static {
         factory().register(VtVenue.class);
+        factory().register(Tip.class);
     }
 
     public static Objectify ofy() {
