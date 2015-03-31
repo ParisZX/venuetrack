@@ -20,15 +20,4 @@ public class Group {
 
     }
 
-    public String printPhoto() {
-
-    	String retString = "";
-
-    	for (Item item : items) {
- 		   retString = retString + item.printPhoto();
-		}
-
-		return retString;
-
-    }	
 }

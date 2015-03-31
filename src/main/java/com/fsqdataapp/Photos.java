@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Photos {
 
-	public List<Group> groups = new ArrayList<Group>();
+	public List<PhotoGroup> groups = new ArrayList<PhotoGroup>();
 
     public Photos() {}
     
@@ -12,7 +12,7 @@ public class Photos {
 
     	String retString = "";
 
-    	for (Group group : groups) {
+    	for (PhotoGroup group : groups) {
  		   retString = retString + group.printPhoto();
 		}
 

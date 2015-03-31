@@ -21,17 +21,14 @@ public class EndpointsServlet extends HttpServlet {
 
     String testId = req.getParameter("id");
 
-	  List<VtVenue> venues = ofy().load().type(VtVenue.class).filter("lat >", 0).list();
+	  List<Venue> venues = ofy().load().type(Venue.class).filter("lat >", 0).list();      
 
-    //for (VtVenue venue : venues) {
-      
-      // convert java object to JSON format,
-      // and returned as JSON formatted string
-      Gson gson = new Gson();
-      String json = gson.toJson(venues);
+    // convert java object to JSON format,
+    // and returned as JSON formatted string
+    Gson gson = new Gson();
+    String json = gson.toJson(venues);
  	
-      response.getWriter().println(json);	
-    
+    response.getWriter().println(json);	    
 
     System.out.println(venues.size());    	
     

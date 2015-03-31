@@ -6,10 +6,6 @@ public class Item {
 
 	public Venue venue = new Venue(); 
 
-	// This is used for photos
-	public String prefix, suffix;
-	public long width, height;
-
 	public Item() {}
 
 	public String print() {
@@ -18,14 +14,5 @@ public class Item {
 
     }
 
-    public String printPhoto() {
-
-    	String link = prefix + "original" + suffix;
-    	String retString = "Photo link: " + link + "\nwidth:" + width + ", height: " + height;
-
-    	return retString;
-
-    }
-	
 }
 

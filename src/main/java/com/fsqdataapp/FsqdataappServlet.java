@@ -63,42 +63,46 @@ public class FsqdataappServlet extends HttpServlet {
     JSONObject obj = gson.fromJson(cgiOutput, JSONObject.class);
     
     /* 
-    The Venue class as defined from Foursquare has a problem: there is an unbounded recursion with the classes Group and Items.
-    This means that Objectify throws a StackoverflowError if the Venue class is used for saving the data. So the solution I used
-    is that I created a seperate class VtVenue, which is actually the venue from Venuetrack's perspective, without using embeded
-    Group and Items classes for the photo URL. Instead, I just create the String with the URL and pass it on to the VtVenue 
-    object as a String. That's what FsqToVt does. 
+    The Venue class as defined from Foursquare has a problem if used with Objectify: there is an unbounded recursion with the
+    classes Group and Items. This means that Objectify throws a StackoverflowError if the Group and Items classes are used for
+    saving both the venues and the photos of the venues. So the solution I used is that I created two new "renamed" PhotoGroup
+    and Photo classes, to overcome the issue. The gson deserializer doesn't care for the different class names if the variables
+    are still correctly named as "groups" and "items".
     */
+
     List<Item> items = new ArrayList<Item>();
     items = obj.response.groups.get(0).items;
 
     for (Item item : items) {
       
-      Venue fsqVenue = item.venue;
-      VtVenue vtVenue = new VtVenue();
-      vtVenue = FsqToVt(fsqVenue);
+      Venue venue = item.venue;
+      
+      venue.lat = venue.location.lat; venue.lng = venue.location.lng;
 
-      // save the final venuetrack venue
-      ofy().save().entity(vtVenue).now();
+      // save the final venuetrack venue...
+      ofy().save().entity(venue).now();
 
-      // print it inside the servlet content
-      servletOutput.println(vtVenue.print());
+      // ...and print the output
+      servletOutput.println(venue.print());
 
-      // let's get the tips for each venue. First, prepare the request url for foursquare
-      URL tipsUrl = new URL("https://api.foursquare.com/v2/venues/" + vtVenue.id + "/tips?sort=recent&limit=100"+token);
+      // let's get the tips for each venue. First, prepare the request url for foursquare...
+      URL tipsUrl = new URL("https://api.foursquare.com/v2/venues/" + venue.id + "/tips?sort=recent&limit=100"+token);
       URLConnection tipsUrlConn = tipsUrl.openConnection();
       
-      // then, we read the contents of the output
+      // ...then, we read the contents of the Foursquare response...
       BufferedReader tipsOutput = new BufferedReader(new InputStreamReader(tipsUrlConn.getInputStream(),"UTF-8"));
       
-      // and finally, using gson we make our raw data into objects
+      // ...and finally, using gson we make our raw data into objects
       JSONObject newObj = gson.fromJson(tipsOutput, JSONObject.class);
+      
       List<Tip> tips = new ArrayList<Tip>();
       tips = newObj.response.tips.items;
       
       for (Tip tip : tips) {
-        // save the tip
+        // save the tip...
         ofy().save().entity(tip).now();
+        
+        // ...and print the output
         servletOutput.println(tip.print());  
       }
     }
@@ -106,32 +110,6 @@ public class FsqdataappServlet extends HttpServlet {
     // Close the output session
     servletOutput.close();
     cgiOutput.close();
-  }
-  
-  public VtVenue FsqToVt(Venue input) {
-    
-    VtVenue output = new VtVenue();
-
-    output.id = input.id;
-    output.name = input.name;
-    output.categories = input.categories;
-    output.lat = input.location.lat;
-    output.lng = input.location.lng;
-
-    output.location = input.location;
-    output.stats = input.stats;
-    output.url = input.url;
-    output.rating = input.rating;
-    output.ratingColor = input.ratingColor;
-    output.ratingSignals = input.ratingSignals;
-
-    String hours = input.hours.status;
-    output.hours = hours;
-
-    String photoUrl = input.photos.groups.get(0).items.get(0).prefix + "original" + input.photos.groups.get(0).items.get(0).suffix;
-    output.photo = photoUrl;
-
-    return output;
   }
 
   public void destroy()
