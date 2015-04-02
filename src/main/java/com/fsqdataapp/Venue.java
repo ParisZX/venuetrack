@@ -10,7 +10,8 @@ public class Venue {
     
     @Id public String id; // Can be Long -if null then autogenerates-, long, or String
     public String name;
-    @Index public double lat, lng;    
+    @Index public double lat;
+    @Index public double lng;    
     public List<Category> categories = new ArrayList<Category>();
     public Location location = new Location();
     public Stats stats = new Stats();
