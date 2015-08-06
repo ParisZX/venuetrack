@@ -47,6 +47,8 @@ public class FsqdataappServlet extends HttpServlet {
     String token = "&oauth_token=C0G5VFZ3V44UFHAIMSDW20ER0CEPWEBTYCJWCCV0M0FO0CHO&v=20141224";
 
     URL url = new URL("https://api.foursquare.com/v2/venues/explore?" + filters + token);
+    servletOutput.println("https://api.foursquare.com/v2/venues/explore?" + filters + token + "\n");
+
     try {
 
       // Initialize conn with Foursquare
