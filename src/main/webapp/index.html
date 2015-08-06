@@ -56,8 +56,9 @@
     <div id="SidebarContainer">
       <nav class="sidebar" id="sidebar">
         <h3>Results:</h3>
-        <div  ng-repeat="venue in venues | filter:query" id="results">
-          <a href="#">{{venue.name}} <img ng-repeat="category in venue.categories" src="{{category.icon.prefix}}32{{category.icon.suffix}}"/></a>
+        <div  ng-repeat="venue in venues | filter:query" class="venue">
+          <a href="#">{{venue.name}} <img ng-repeat="category in venue.categories" src="{{category.icon.prefix}}32{{category.icon.suffix}}"/></a><br/>
+          <div class="info">{{venue.location.address}}, {{venue.location.city}}</div>
         </div>
       </nav>
     </div>
