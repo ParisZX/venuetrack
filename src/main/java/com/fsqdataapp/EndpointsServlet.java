@@ -61,13 +61,12 @@ public class EndpointsServlet extends HttpServlet {
             String json = gson.toJson(venues);
           
             response.getWriter().println(json);   
-            System.out.println(venues.size());        
+
           }
         }
       }
       else {
         List<Venue> venues = ofy().load().type(Venue.class).list();      
-        response.getWriter().println(venues.size());
 
         // convert java object to JSON format,
         // and returned as JSON formatted string

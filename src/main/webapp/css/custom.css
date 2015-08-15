@@ -1,0 +1,59 @@
+body {
+	font-weight: 300;
+}
+
+map {
+  	position:absolute; 
+  	left: 0px;
+  	top: 50px;
+  	right: 0px;
+  	bottom: 0px; 
+  	z-index: 0; /* layer 0 (background) */
+}
+
+.panel  {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+}
+
+.panel:hover  {
+	opacity: 0.8;
+}
+
+
+.panel-default .panel-heading {
+	background-color: #5f4f94;
+	color: white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+
+}
+
+.panel-default .panel-body {
+		font-size: 12px;
+}
+
+.navbar .navbar-inverse .navbar-fixed-top {
+	opacity: 0.90;
+}
+
+.panel-heading {
+	padding: 5px 15px;
+}
+
+.navbar-inverse {
+    background-color: #5f4f94;
+}
+
+.btn-close-sidebar {
+	position: absolute;
+	top: 60px;
+	right:350px;
+	z-index: 1;
+}
+
+.btn-primary {
+    background-color: #5f4f94;
+    display: none;
+}

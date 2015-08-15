@@ -1,21 +1,22 @@
-'use strict';
+(function() {
+	var myApp = angular.module('myApp',['ngMap','venue']);
 
-// Declare app level module which depends on views, and components
-var myApp = angular.module('myApp', [
-  'ngRoute',
-  'myApp.version',
-  'ngMap',
-  'myAppControllers'
-]);
+	myApp.controller('MainController', ['$scope', '$http' , 
+		function($scope, $http) {
 
-myApp.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/venues/:venueName', {
-        templateUrl: 'partials/venue-detail.html',
-        controller: 'VenueDetailCtrl'
-      }).
-      otherwise({
-        redirectTo: 'index.html'
-      });
-}]);
+			$scope.venues = [];
+
+			var apiData = 'endpoints?what=venues';
+			var localData = 'data/data.json';
+
+			$http.get(apiData).success(function(data) {    
+	    	
+	    	$scope.venues = data;
+	    
+	    });
+
+
+
+
+
+	}]);
