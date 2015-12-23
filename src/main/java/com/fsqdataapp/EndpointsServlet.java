@@ -28,14 +28,14 @@ public class EndpointsServlet extends HttpServlet {
 
       String venueId = req.getParameter("id");
 
-  	  Venue venue = ofy().load().type(Venue.class).id(venueId).now();      
+  	  Venue venue = ofy().load().type(Venue.class).id(venueId).now();
 
       // convert java object to JSON format,
       // and returned as JSON formatted string
       Gson gson = new Gson();
       String json = gson.toJson(venue);
-   	
-      response.getWriter().println(json);	    
+
+      response.getWriter().println(json);
     }
 
     else if (req.getParameter("what").equals("venues")) {
@@ -59,36 +59,58 @@ public class EndpointsServlet extends HttpServlet {
             // and returned as JSON formatted string
             Gson gson = new Gson();
             String json = gson.toJson(venues);
-          
-            response.getWriter().println(json);   
+
+            response.getWriter().println(json);
 
           }
         }
       }
       else {
-        List<Venue> venues = ofy().load().type(Venue.class).list();      
+        List<Venue> venues = ofy().load().type(Venue.class).limit(10).list();
 
         // convert java object to JSON format,
         // and returned as JSON formatted string
         Gson gson = new Gson();
         String json = gson.toJson(venues);
-      
-        response.getWriter().println(json);   
-        
+
+        response.getWriter().println(json);
+
       }
     }
     else if (req.getParameter("what").equals("tips")) {
-      /*
-      INSERT TIPS ENDPOINTS HERE
+      if (req.getParameter("type").equals("full")) {
+        List<Tip> tips = ofy().load().type(Tip.class).list();
 
+        // convert java object to JSON format,
+        // and returned as JSON formatted string
+        Gson gson = new Gson();
+        String json = gson.toJson(tips);
+        response.getWriter().println(json);
+      }
+      else if (req.getParameter("type").equals("condensed")) {
+        List<Tip> tips = ofy().load().type(Tip.class).list();
 
+        // convert java object to JSON format,
+        // and returned as JSON formatted string
+        Gson gson = new Gson();
+        String id = new String();
+        String text = new String();
 
-      */
+        for(Tip tip : tips) {
+          id = gson.toJson(tip.id);
+          response.getWriter().println(id);
+          text = gson.toJson(tip.text);
+          response.getWriter().println(text);
+        }
+      }
+      else {
+        response.getWriter().println("Error: Wrong parameters set!");
+      }
     }
     else {
       System.out.println("nothing to do...");
     }
 
-    
+
   }
 }

@@ -1,0 +1,58 @@
+{	
+	"id":"4b4741baf964a520b62d26e3",
+	"name":"Village Cinemas",
+	"lat":40.55473274671582,
+	"lng":22.993526458740234,
+	"categories":
+				[
+					{
+						"id":"4bf58dd8d48988d180941735",
+						"name":"Multiplex",
+						"pluralName":"Multiplexes",
+						"shortName":"Cineplex",
+						"icon":{
+								"prefix":"https://ss3.4sqi.net/img/categories_v2/arts_entertainment/movietheater_",
+								"suffix":".png"
+								},
+						"primary":true
+					}
+				],
+	"location": {
+					"lat":40.55473274671582,
+					"lng":22.993526458740234,
+					"address":"11ο χλμ Εθνικής Οδού Θεσσαλονίκης-Μουδανιών",
+					"postalCode":"546 36",
+					"cc":"GR",
+					"city":"Πυλαία",
+					"state":"Θεσσαλονίκη",
+					"country":"Ελλάδα"
+				},
+	"stats":{
+		"checkinsCount":7909,
+		"usersCount":2632,
+		"tipCount":43
+	},
+	"url":"http://www.villagecinemas.gr",
+	"rating":8.5,
+	"ratingColor":"73CF42",
+	"ratingSignals":353,
+	"hours":{},
+	"photos":
+			{
+				"groups":
+							[
+								{
+									"items":
+												[
+													{
+														"prefix":"https://irs2.4sqi.net/img/general/",
+														"suffix":"/31708749_honQuNyDyWTEWY5wzdwbbdyOgpLgPLnR0QQ9tMW_QUg.jpg",
+														"width":720,
+														"height":540
+													}
+												]
+								}
+							]
+			},
+	"lastUpdated":"2015/07/31 19:08:50"
+}

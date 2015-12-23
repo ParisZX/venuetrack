@@ -68,22 +68,20 @@
     color: white;
 }
 
-.sidebar-nav li a {
-    display: block;
-    padding: 0.8em;
+.sidebar-nav a {
     text-decoration: none;
     color: #fff;
 }
 
-.sidebar-nav li a:hover {
+.sidebar-nav a:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
 }
 
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
+.sidebar-nav a:active,
+.sidebar-nav a:focus {
     text-decoration: none;
+    color: #fff;
 }
 
 .sidebar-nav > .sidebar-brand {
