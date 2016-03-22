@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <!-- <cron>
+  <cron>
     <url>/fsqdataapp</url>
-    <description>Calls the webpage /fsqdataapp every minute</description>
-    <schedule>every 1 minutes</schedule>
-  </cron> -->
-</cronentries> 
+    <description>Calls the webpage /fsqdataapp every 10 minutes</description>
+    <schedule>every 10 minutes</schedule>
+  </cron>
+</cronentries>

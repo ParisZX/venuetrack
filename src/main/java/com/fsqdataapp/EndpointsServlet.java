@@ -66,7 +66,10 @@ public class EndpointsServlet extends HttpServlet {
         }
       }
       else {
-        List<Venue> venues = ofy().load().type(Venue.class).limit(10).list();
+        List<Venue> venues = ofy().load().type(Venue.class).list();
+
+        // Check venues number (normally commented)
+        // response.getWriter().println(venues.size());
 
         // convert java object to JSON format,
         // and returned as JSON formatted string
@@ -93,12 +96,9 @@ public class EndpointsServlet extends HttpServlet {
         // convert java object to JSON format,
         // and returned as JSON formatted string
         Gson gson = new Gson();
-        String id = new String();
         String text = new String();
 
         for(Tip tip : tips) {
-          id = gson.toJson(tip.id);
-          response.getWriter().println(id);
           text = gson.toJson(tip.text);
           response.getWriter().println(text);
         }
@@ -108,7 +108,7 @@ public class EndpointsServlet extends HttpServlet {
       }
     }
     else {
-      System.out.println("nothing to do...");
+      response.getWriter().println("Error: Wrong parameters set!");
     }
 
 
