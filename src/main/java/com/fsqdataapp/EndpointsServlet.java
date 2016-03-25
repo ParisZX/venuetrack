@@ -24,21 +24,32 @@ public class EndpointsServlet extends HttpServlet {
     // Prepare the server output writer
     PrintWriter servletOutput = response.getWriter();
 
-    if (req.getParameter("what").equals("venue")) {
+    if (req.getParameter("searchFor").equals("venue")) {
 
-      String venueId = req.getParameter("id");
+      Venue venue;
 
-  	  Venue venue = ofy().load().type(Venue.class).id(venueId).now();
+      if (req.getParameter("id") == null) {
+        response.getWriter().println("[ERROR] Wrong parameters set. Please ensure that you provide an id for the venue.");
+      }
+      else {
+        String venueId = req.getParameter("id");
+    	  venue = ofy().load().type(Venue.class).id(venueId).now();
+        String json;
+        if (venue != null) {
+          // convert java object to JSON format,
+          // and returned as JSON formatted string
+          Gson gson = new Gson();
+          json = gson.toJson(venue);
+        }
+        else {
+          json = "[ERROR] Wrong parameters set. Please recheck that the id corresponds to a venue.";
+        }
+        response.getWriter().println(json);
+      }
 
-      // convert java object to JSON format,
-      // and returned as JSON formatted string
-      Gson gson = new Gson();
-      String json = gson.toJson(venue);
-
-      response.getWriter().println(json);
     }
 
-    else if (req.getParameter("what").equals("venues")) {
+    else if (req.getParameter("searchFor").equals("venues")) {
 
       if (req.getParameter("filterBy") != null) {
         if (req.getParameter("filterBy").equals("location")) {
@@ -80,7 +91,8 @@ public class EndpointsServlet extends HttpServlet {
 
       }
     }
-    else if (req.getParameter("what").equals("tips")) {
+
+    else if (req.getParameter("searchFor").equals("tips")) {
       if (req.getParameter("type").equals("full")) {
         List<Tip> tips = ofy().load().type(Tip.class).list();
 
@@ -104,11 +116,12 @@ public class EndpointsServlet extends HttpServlet {
         }
       }
       else {
-        response.getWriter().println("Error: Wrong parameters set!");
+        response.getWriter().println("[ERROR] Wrong parameters set!");
       }
     }
+
     else {
-      response.getWriter().println("Error: Wrong parameters set!");
+      response.getWriter().println("[ERROR] Wrong parameters set!");
     }
 
 

@@ -5,9 +5,12 @@ import java.util.*;
 
 public class Category {
 
-	public String id, name, pluralName, shortName;
+	public transient String id;
+  public String name;
+  public transient String pluralName;
+  public transient String shortName;
 	public Icon icon = new Icon();
-	public boolean primary;
+	public transient boolean primary;
 
     public Category() {} // There must be a no-arg constructor
 
