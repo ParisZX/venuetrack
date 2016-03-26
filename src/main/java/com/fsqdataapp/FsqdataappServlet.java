@@ -38,8 +38,8 @@ public class FsqdataappServlet extends HttpServlet {
     double longitude = (rand.nextDouble()/5 - 0.1) + 22.9374991;
     int price = rand.nextInt(4); int limit = 50; int venuePhotos = 1;
 
-    // Define what type of search is wanted. "explore" is better for top results in given area, "search" is more general. 
-    String typeOfSearch = "search";
+    // Define what type of search is wanted. "explore" is better for top results in given area, "search" is more general.
+    String typeOfSearch = "explore";
 
     // Prepare the filters string
     String filters = "ll=" + latitude + "," + longitude + "&limit=" + limit + "&venuePhotos=" + venuePhotos;
@@ -49,8 +49,8 @@ public class FsqdataappServlet extends HttpServlet {
     // Authentication Token needed by Foursquare
     String token = "&oauth_token=C0G5VFZ3V44UFHAIMSDW20ER0CEPWEBTYCJWCCV0M0FO0CHO&v=20141224";
 
-    URL url = new URL("https://api.foursquare.com/v2/venues/" + typeOfSearch + filters + token);
-    servletOutput.println("https://api.foursquare.com/v2/venues/" + typeOfSearch + filters + token + "\n");
+    URL url = new URL("https://api.foursquare.com/v2/venues/" + typeOfSearch + "?" + filters + token);
+    servletOutput.println("https://api.foursquare.com/v2/venues/" + typeOfSearch + "?" + filters + token + "\n");
 
     try {
 

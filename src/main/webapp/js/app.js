@@ -12,10 +12,17 @@
 
           $scope.venues = data;
 
-          for (i = 0; i < data.length; i++){
-			        createMarker(data[i]);
-			    }
+          var distinct = [];
 
+          for (var i in data) {
+            if(data[i].id != null) {
+		          createMarker(data[i]);
+              if(!checkIfExists(data[i].categories[0].name,distinct)) {
+                distinct.push(data[i].categories[0].name);
+                console.log("[PUSH] " + data[i].categories[0].name);
+              }
+            }
+          }
         });
 
   	    $scope.markers = [];
@@ -26,6 +33,17 @@
 			    	zoom: 13,
 			    	center: thessCenter
 		  	});
+
+        var checkIfExists = function (key, array) {
+          for (i in array) {
+            if(key === array[i]) {
+              // console.log("[TRUE] key: " + key + " array[i]: " + array[i]);
+              return true;
+            }
+          }
+          // console.log("[FALSE] key: " + key);
+          return false;
+        }
 
 		    var createMarker = function (info) {
 
