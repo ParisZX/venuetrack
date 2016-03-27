@@ -12,17 +12,10 @@
 
           $scope.venues = data;
 
-          var distinct = [];
-
-          for (var i in data) {
-            if(data[i].id != null) {
+          for (var i in data)
+            if(data[i].id != null)
 		          createMarker(data[i]);
-              if(!checkIfExists(data[i].categories[0].name,distinct)) {
-                distinct.push(data[i].categories[0].name);
-                console.log("[PUSH] " + data[i].categories[0].name);
-              }
-            }
-          }
+
         });
 
   	    $scope.markers = [];
@@ -34,17 +27,6 @@
 			    	center: thessCenter
 		  	});
 
-        var checkIfExists = function (key, array) {
-          for (i in array) {
-            if(key === array[i]) {
-              // console.log("[TRUE] key: " + key + " array[i]: " + array[i]);
-              return true;
-            }
-          }
-          // console.log("[FALSE] key: " + key);
-          return false;
-        }
-
 		    var createMarker = function (info) {
 
 			  	var infoWindow = new google.maps.InfoWindow();
@@ -54,7 +36,7 @@
 		            position: new google.maps.LatLng(info.lat, info.lng),
 		            id: info.id,
 		            title: info.name,
-		            icon: info.categories[0].icon.prefix+"bg_32"+info.categories[0].icon.suffix
+		            icon: "images/icons/"+info.categories[0].icon.prefix.slice(39)+"bg_32"+info.categories[0].icon.suffix
 		        });
 
 		        marker.content = '<div class="infoWindowContent">' + info.location.address + '</div>';
