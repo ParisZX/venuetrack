@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Location {
 
-	public double lat, lng;
+	public transient double lat, lng;
 	public String address, postalCode, cc, city, state, country;
 
     public Location() {} // There must be a no-arg constructor

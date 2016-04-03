@@ -19,9 +19,9 @@ public class Venue {
     public float rating;
     public transient String ratingColor;
     public transient long ratingSignals;
-    public Hours hours = new Hours();
+    public transient Hours hours = new Hours();
     public transient Photos photos = new Photos();
-    public String lastUpdated;
+    public transient String lastUpdated;
 
     public Venue() {
 
