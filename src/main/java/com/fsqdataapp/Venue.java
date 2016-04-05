@@ -15,8 +15,8 @@ public class Venue {
     public List<Category> categories = new ArrayList<Category>();
     public Location location = new Location();
     public transient Stats stats = new Stats();
-    public String url;
-    public float rating;
+    public transient String url;
+    public transient float rating;
     public transient String ratingColor;
     public transient long ratingSignals;
     public transient Hours hours = new Hours();
