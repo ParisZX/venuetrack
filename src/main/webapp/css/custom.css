@@ -2,6 +2,10 @@ body {
 	font-weight: 300;
 }
 
+html, body, .navbar, #bot-links {
+  min-width: 450px;
+}
+
 #map {
   	position:absolute;
   	left: 0px;
@@ -15,6 +19,7 @@ body {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	border-radius: 5px;
+  margin-right: 10px;
 }
 
 .panel:hover  {
@@ -60,4 +65,83 @@ body {
 
 marker {
 	background-image: "https://ss1.4sqi.net/img/pin-squircle-blue-bd58a9a123ca8fb3a84f4ee889b6b781.png";
+}
+
+.select-sort {
+  margin: 10px;
+}
+
+.select-filter {
+  float: left;
+}
+
+.select-filter-second {
+  margin: 0;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.select-sort label {
+  font-weight: normal;
+}
+
+.select-sort select {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+  color: white;
+  border-radius: 3px;
+  font-weight: normal;
+  text-align-last: center;
+  margin-left: 10px;
+  padding: 5px 10px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+}
+
+#bot-links {
+  position: absolute;
+  bottom: 0;
+  background: #5f4f94;
+  padding: 12px;
+  color: white;
+}
+
+#bot-links > a {
+  color: white;
+}
+
+.fsq-rating {
+  padding: 2px;
+}
+
+.venuetrack-rating {
+  font-size: 15px;
+}
+
+.glyphicon-thumbs-up {
+  color: #2e6da4;
+}
+
+.glyphicon-thumbs-down {
+  color: #d43f3a;
+}
+
+.rating-tab {
+  margin-top: 10px;
+}
+
+.marker-info {
+  height: 30px;
+  line-height: 30px;
+}
+
+.marker-info.rating-tab {
+  margin-top: 0;
+}
+
+.info-pages-container {
+  margin-top: 100px;
+  border-left: 1px gray solid;
 }

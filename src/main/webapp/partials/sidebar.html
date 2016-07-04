@@ -2,10 +2,55 @@
 <button id="close-sidebar" type="submit" class="btn btn-sm btn-primary btn-close-sidebar"><span class="glyphicon glyphicon-remove"></span></button>
 <div id="sidebar-wrapper">
 	<div class="sidebar-nav">
-    	<div ng-repeat="venue in venues | filter:query" class="panel panel-default">
+    <div class="select-sort select-filter">
+      <select ng-model="sort">
+        <option disabled="disabled" value="orderby">Order By</option>
+        <option value="+name">Name A-Z</option>
+        <option value="-name">Name Z-A</option>
+        <option value="rating">Rating</option>
+        <option value="location.address">Address</option>
+        <option value="location.city">City</option>
+      </select>
+    </div>
+    <div class="select-sort">
+      <select ng-model="categoryFilter">
+        <option value="">Category</option>
+        <option value="">All Venues</option>
+        <option value="cafe">Cafes</option>
+        <option value="restaurant">Restaurants</option>
+        <option value="bar">Bars</option>
+        <option value="shop">Shops</option>
+        <option value="cinema">Cinemas</option>
+        <option value="museum">Museums</option>
+        <option value="park">Parks & Squares</option>
+        <option value="snack">Snacks</option>
+        <option value="sports bar">Sports Bars</option>
+      </select>
+    </div>
+    <div class="select-sort select-filter select-filter-second">
+      <select ng-model="locationFilter">
+        <option value="">Location</option>
+        <option value="">All</option>
+        <option value="Θεσσαλονίκη">Thessaloniki</option>
+        <option value="Καλαμαριά">Kalamaria</option>
+        <option value="Θέρμη">Thermi</option>
+        <option value="Εύοσμος">Evosmos</option>
+        <option value="Κορδελιό">Kordelio</option>
+        <option value="Πανόραμα">Panorama</option>
+      </select>
+    </div>
+    <div class="select-sort">
+      <select ng-model="sortByPopularity">
+        <option disabled="disabled" value="popularity">Popularity</option>
+        <option value="-stats.checkinsCount">Most Popular</option>
+        <option value="+stats.checkinsCount">Least Popular</option>
+      </select>
+    </div>
+      <div ng-repeat="venue in venues | filter:query | orderBy:sort | orderBy:sortByPopularity | filter:categoryFilter | filter:locationFilter | limitTo:limitVenues" class="panel panel-default">
 			<div class="panel-heading"><a  ng-href="#/venues/{{venue.id}}">{{venue.name}}</a></div>
 		  	<div class="panel-body">
-                {{venue.location.address}}, {{venue.location.city}}			  	
+                {{ venue.location.address | limitTo: 30 }}{{venue.location.address.length > 20 ? '..' : ''}} {{venue.location.city}} <img ng-src="{{venue.categories[0].icon.prefix}}bg_32{{venue.categories[0].icon.suffix}}" />
+                <div class="rating-tab"> Foursquare rating: <span class="fsq-rating" style="background: #{{venue.ratingColor}}">{{venue.rating}}/10</span> | Venuetrack rating: <span class="venuetrack-rating glyphicon {{venue.venuetrackRating == 'neg' ? 'glyphicon-thumbs-down' : 'glyphicon-thumbs-up'}}" ></span> </div>
 			</div>
 		</div>
 	</div>
@@ -21,6 +66,6 @@
     	$("#sidebar-wrapper").hide();
     	$("#close-sidebar").hide();
     });
-    
+
 	});
 </script>

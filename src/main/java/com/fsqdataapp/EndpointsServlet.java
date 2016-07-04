@@ -93,8 +93,17 @@ public class EndpointsServlet extends HttpServlet {
     }
 
     else if (req.getParameter("searchFor").equals("tips")) {
+
+      List<Tip> tips = new ArrayList<Tip>();
+
+      if(req.getParameter("venueId") != null) {
+        tips = ofy().load().type(Tip.class).filter("venueId",req.getParameter("venueId")).list();
+      }
+      else {
+        tips = ofy().load().type(Tip.class).list();
+      }
+
       if (req.getParameter("type").equals("full")) {
-        List<Tip> tips = ofy().load().type(Tip.class).list();
 
         // convert java object to JSON format,
         // and returned as JSON formatted string
@@ -103,7 +112,6 @@ public class EndpointsServlet extends HttpServlet {
         response.getWriter().println(json);
       }
       else if (req.getParameter("type").equals("condensed")) {
-        List<Tip> tips = ofy().load().type(Tip.class).list();
 
         // convert java object to JSON format,
         // and returned as JSON formatted string

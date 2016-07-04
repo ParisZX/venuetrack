@@ -14,14 +14,15 @@ public class Venue {
     @Index public double lng;
     public List<Category> categories = new ArrayList<Category>();
     public Location location = new Location();
-    public transient Stats stats = new Stats();
-    public transient String url;
-    public transient float rating;
-    public transient String ratingColor;
-    public transient long ratingSignals;
-    public transient Hours hours = new Hours();
-    public transient Photos photos = new Photos();
-    public transient String lastUpdated;
+    public Stats stats = new Stats();
+    public String url;
+    public float rating;
+    public String venuetrackRating;
+    public String ratingColor;
+    public long ratingSignals;
+    public Hours hours = new Hours();
+    public Photos photos = new Photos();
+    public String lastUpdated;
 
     public Venue() {
 

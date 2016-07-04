@@ -18,7 +18,7 @@
 
         });
 
-  	    $scope.markers = [];
+  	    $scope.markers = []; $scope.sort = 'orderby'; $scope.sortByPopularity = 'popularity'; $scope.categoryFilter = ''; $scope.locationFilter = ''; $scope.limitVenues = 200;
 
 	  		thessCenter = {lat: 40.6323456, lng: 22.9408366};
 
@@ -29,17 +29,30 @@
 
 		    var createMarker = function (info) {
 
-			  	var infoWindow = new google.maps.InfoWindow();
+			  	var infoWindow = new google.maps.InfoWindow(); var venuetrackRating;
 
 		        var marker = new google.maps.Marker({
 		            map: $scope.map,
 		            position: new google.maps.LatLng(info.lat, info.lng),
 		            id: info.id,
 		            title: info.name,
-		            icon: "images/icons/"+info.categories[0].icon.prefix.slice(39)+"bg_32"+info.categories[0].icon.suffix
+		            icon: info.categories[0].icon.prefix+"bg_32"+info.categories[0].icon.suffix
 		        });
 
-		        marker.content = '<div class="infoWindowContent">' + info.location.address + '</div>';
+            if(info.venuetrackRating == "neg") {
+              venuetrackRating = 'glyphicon-thumbs-down';
+            }
+            else {
+              venuetrackRating = 'glyphicon-thumbs-up';
+            }
+
+            // icon: "images/icons/"+info.categories[0].icon.prefix.slice(39)+"bg_32"+info.categories[0].icon.suffix
+
+		        marker.content = '<div class="infoWindowContent"> <div class="marker-info marker-category">Category: ' + info.categories[0].name + " <img style='height: 25px;' src='" + info.categories[0].icon.prefix+"bg_32"+info.categories[0].icon.suffix + "'/>" + '</div>' +
+            '<div class="marker-info marker-address">Address: ' + info.location.address + ' ' + info.location.city + '</div> <div class="marker-info marker-stats"> Checkins Count: ' + info.stats.checkinsCount + ' | Tips Count: ' + info.stats.tipCount + '</div>' +
+            '<div class="marker-info rating-tab"> Foursquare rating: <span class="fsq-rating" style="background: #' + info.ratingColor + '">' +
+            info.rating + '/10</span> | Venuetrack rating: <span class="venuetrack-rating glyphicon ' +  venuetrackRating + '" ></span> </div>' +
+            '<div class="marker-info marker-url"> Venue URL: <a href="' + info.url + '">' + info.url + '</a></div></div>' ;
 
 		        google.maps.event.addListener(marker, 'click', function(){
 		            infoWindow.setContent('<h2>' + marker.title + '</h2>' + marker.content);

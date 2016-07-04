@@ -16,6 +16,10 @@
         <servlet-name>endpoints</servlet-name>
         <servlet-class>com.fsqdataapp.EndpointsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>train</servlet-name>
+        <servlet-class>com.fsqdataapp.TrainServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>fsqdataapp</servlet-name>
         <url-pattern>/fsqdataapp</url-pattern>
@@ -24,6 +28,10 @@
         <servlet-name>endpoints</servlet-name>
         <url-pattern>/endpoints</url-pattern>
     </servlet-mapping>
+        <servlet-mapping>
+            <servlet-name>train</servlet-name>
+            <url-pattern>/train</url-pattern>
+        </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
