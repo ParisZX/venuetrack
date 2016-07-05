@@ -254,7 +254,7 @@ public class TrainServlet extends HttpServlet {
     List<Venue> venues = ofy().load().type(Venue.class).list();
 
     for (Venue venue: venues) {
-      servletOutput.println("[INFO]\tVenue: " + venue.name);
+      // servletOutput.println("[INFO]\tVenue: " + venue.name);
 
       List<Tip> tips = ofy().load().type(Tip.class).filter("venueId",venue.id).list();
 
@@ -276,7 +276,7 @@ public class TrainServlet extends HttpServlet {
       if (count>0) {
         rating = rating/count;
 
-        servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
+        // servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
 
         if (rating > 0.5) {
           venue.venuetrackRating = "pos";
@@ -288,7 +288,7 @@ public class TrainServlet extends HttpServlet {
       else {
         venue.venuetrackRating = "zeroTips";
 
-        servletOutput.println("[INFO]\t zero useful tips");
+        // servletOutput.println("[INFO]\t zero useful tips");
 
       }
       ofy().save().entity(venue).now();

@@ -3,22 +3,23 @@
 <div id="sidebar-wrapper">
 	<div class="sidebar-nav">
     <div class="select-sort select-filter">
-      <select ng-model="sort">
+      <select ng-model="sort" style="min-width: 120px;">
         <option disabled="disabled" value="orderby">Order By</option>
         <option value="+name">Name A-Z</option>
         <option value="-name">Name Z-A</option>
-        <option value="rating">Rating</option>
+        <option value="+rating">Rating (Asc)</option>
+        <option value="-rating">Rating (Dsc)</option>
         <option value="location.address">Address</option>
-        <option value="location.city">City</option>
+        <option value="location.city">Municipality</option>
       </select>
     </div>
     <div class="select-sort">
-      <select ng-model="categoryFilter">
+      <select ng-model="categoryFilter" style="min-width: 150px;">
         <option value="">Category</option>
-        <option value="">All Venues</option>
-        <option value="cafe">Cafes</option>
+        <option value="café">Cafes</option>
         <option value="restaurant">Restaurants</option>
         <option value="bar">Bars</option>
+        <option value="hotel">Hotels</option>
         <option value="shop">Shops</option>
         <option value="cinema">Cinemas</option>
         <option value="museum">Museums</option>
@@ -28,25 +29,27 @@
       </select>
     </div>
     <div class="select-sort select-filter select-filter-second">
-      <select ng-model="locationFilter">
+      <select ng-model="locationFilter" style="min-width: 130px;">
         <option value="">Location</option>
-        <option value="">All</option>
         <option value="Θεσσαλονίκη">Thessaloniki</option>
         <option value="Καλαμαριά">Kalamaria</option>
         <option value="Θέρμη">Thermi</option>
         <option value="Εύοσμος">Evosmos</option>
         <option value="Κορδελιό">Kordelio</option>
         <option value="Πανόραμα">Panorama</option>
+        <option value="Συκιές">Sykies</option>
+        <option value="Πολύχνη">Polichni</option>
+
       </select>
     </div>
     <div class="select-sort">
-      <select ng-model="sortByPopularity">
+      <select ng-model="sortByPopularity" style="min-width: 140px;">
         <option disabled="disabled" value="popularity">Popularity</option>
         <option value="-stats.checkinsCount">Most Popular</option>
         <option value="+stats.checkinsCount">Least Popular</option>
       </select>
     </div>
-      <div ng-repeat="venue in venues | filter:query | orderBy:sort | orderBy:sortByPopularity | filter:categoryFilter | filter:locationFilter | limitTo:limitVenues" class="panel panel-default">
+      <div ng-repeat="venue in venues | filter:searchFilter | orderBy:sort | filter:categoryFilter | filter:locationFilter | limitTo:limitVenues" class="panel panel-default">
 			<div class="panel-heading"><a  ng-href="#/venues/{{venue.id}}">{{venue.name}}</a></div>
 		  	<div class="panel-body">
                 {{ venue.location.address | limitTo: 30 }}{{venue.location.address.length > 20 ? '..' : ''}} {{venue.location.city}} <img ng-src="{{venue.categories[0].icon.prefix}}bg_32{{venue.categories[0].icon.suffix}}" />

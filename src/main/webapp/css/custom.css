@@ -2,7 +2,7 @@ body {
 	font-weight: 300;
 }
 
-html, body, .navbar, #bot-links {
+html, body, .navbar {
   min-width: 450px;
 }
 
@@ -69,6 +69,7 @@ marker {
 
 .select-sort {
   margin: 10px;
+  overflow: hidden;
 }
 
 .select-filter {
@@ -108,8 +109,9 @@ marker {
   color: white;
 }
 
-#bot-links > a {
+#bot-links > a, #bot-links > a:hover, #bot-links > a:active, #bot-links > a:focus {
   color: white;
+  text-decoration: none;
 }
 
 .fsq-rating {
@@ -144,4 +146,10 @@ marker {
 .info-pages-container {
   margin-top: 100px;
   border-left: 1px gray solid;
+}
+
+@media (max-width:550px) {
+  #search {
+    width: 100%;
+  }
 }

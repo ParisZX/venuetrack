@@ -6,11 +6,13 @@
 
 	    	console.log('im MainController!');
 
-			// var venues = []; var markers = []; var infoWindows = []; var map;
+			  var allVenues; // var venues = []; var markers = []; var infoWindows = []; var map;
 
 	  		$scope.venues = venuesAPI.query(function(data) {
 
           $scope.venues = data;
+
+          allVenues = data;
 
           for (var i in data)
             if(data[i].id != null)
@@ -19,6 +21,41 @@
         });
 
   	    $scope.markers = []; $scope.sort = 'orderby'; $scope.sortByPopularity = 'popularity'; $scope.categoryFilter = ''; $scope.locationFilter = ''; $scope.limitVenues = 200;
+
+        // $scope.change = function(data) {
+        //   $scope.venues = allVenues.filter(function (el) {
+        //     var searchTo = el.name + el.location.address + el.location.city + el.categories[0].name;
+        //
+        //     if (searchTo.replace(/\s+/g, '').toLowerCase().indexOf(data.replace(/\s+/g, '').toLowerCase()) > -1)
+        //      return el;
+        //   });
+        // };
+
+        $scope.searchFilter = function(venue) {
+          // default to no match
+          var isMatch = true;
+
+          if ($scope.query) {
+            // split the input by space
+            var parts = $scope.query.split(' ');
+
+            // iterate each of the words that was entered
+            parts.forEach(function(part) {
+
+              var searchTo = venue.name + venue.location.address + venue.location.city + venue.categories[0].name;
+
+              // if the word is found in the post, a set the flag to return it.
+              if (!(searchTo.replace(/\s+/g, '').toLowerCase().indexOf(part.replace(/\s+/g, '').toLowerCase()) > -1)) {
+                isMatch = false;
+              }
+            });
+          } else {
+            // if nothing is entered, return all posts
+            isMatch = true;
+          }
+
+          return isMatch;
+        };
 
 	  		thessCenter = {lat: 40.6323456, lng: 22.9408366};
 
