@@ -94,7 +94,7 @@ public class TrainServlet extends HttpServlet {
     // Create the splits
     List<TrainSplit> splits = new ArrayList<TrainSplit>();
 
-    System.out.println("[INFO]\tPerforming 10-fold cross-validation on data set: "+args.get(0));
+    // System.out.println("[INFO]\tPerforming 10-fold cross-validation on data set: "+args.get(0));
 
     // A list with all the files for splitting
     List<File> files = new ArrayList<File>();
@@ -150,18 +150,18 @@ public class TrainServlet extends HttpServlet {
   }
 
   public void printSplit(TrainSplit split) {
-    System.out.println("\t[INFO]\tSplit's train set length = " + split.train.size());
+    // System.out.println("\t[INFO]\tSplit's train set length = " + split.train.size());
     for (File file: split.train) {
       // System.out.println(file.getName());
     }
-    System.out.println("\t[INFO]\tSplit's test set length = " + split.test.size());
+    // System.out.println("\t[INFO]\tSplit's test set length = " + split.test.size());
     for (File file: split.test) {
-      System.out.println(file.getName());
+      // System.out.println(file.getName());
       List<String> words = readFile(file);
       if (FILTER_STOP_WORDS) {
         words = filterStopWords(words);
       }
-      System.out.println(words);
+      // System.out.println(words);
     }
   }
 

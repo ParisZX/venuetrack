@@ -9,6 +9,8 @@
         <option value="-name">Name Z-A</option>
         <option value="+rating">Rating (Asc)</option>
         <option value="-rating">Rating (Dsc)</option>
+        <option value="-stats.checkinsCount">Most Popular</option>
+        <option value="+stats.checkinsCount">Least Popular</option>
         <option value="location.address">Address</option>
         <option value="location.city">Municipality</option>
       </select>
@@ -42,13 +44,12 @@
 
       </select>
     </div>
-    <div class="select-sort">
+    <!-- <div class="select-sort">
       <select ng-model="sortByPopularity" style="min-width: 140px;">
         <option disabled="disabled" value="popularity">Popularity</option>
-        <option value="-stats.checkinsCount">Most Popular</option>
-        <option value="+stats.checkinsCount">Least Popular</option>
+
       </select>
-    </div>
+    </div> -->
       <div ng-repeat="venue in venues | filter:searchFilter | orderBy:sort | filter:categoryFilter | filter:locationFilter | limitTo:limitVenues" class="panel panel-default">
 			<div class="panel-heading"><a  ng-href="#/venues/{{venue.id}}">{{venue.name}}</a></div>
 		  	<div class="panel-body">
