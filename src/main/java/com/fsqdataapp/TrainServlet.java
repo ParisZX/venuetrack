@@ -80,10 +80,41 @@ public class TrainServlet extends HttpServlet {
     s = s.replaceAll("ΰ","υ").replaceAll("ΐ","ι");
     s = s.replaceAll("ώ","ω").replaceAll("ύ","υ").replaceAll("ή","η").replaceAll("ί","ι").replaceAll("έ","ε").replaceAll("ό","ο").replaceAll("ά","α").replaceAll("ς","σ");
 
+    // Character '
+    s = s.replace("\\u0027","");
+
+    // Character &
+    s = s.replace("\\u0026","");
+
+    // Emojis
+    s = s.replaceAll(":\\)","☺").replaceAll(":-\\)","☺").replaceAll(":D","☺").replaceAll(":-D","☺").replaceAll(":P","☺").replaceAll(":-P","☺").replaceAll(";\\)","☺").replaceAll(";-\\)","☺");
+    s = s.replaceAll(";\\(","☹").replaceAll(";-\\(","☹").replaceAll(":\\(","☹").replaceAll(":-\\(","☹").replaceAll(":/","☹").replaceAll(":-/","☹");
+
     // remove multiple occurances of the same character (ooooo's and aaaaa's, but no less that 3, so that we won't mess with words like good, book etc)
     s = s.replaceAll("(.)\\1\\1+","$1");
 
-    return s.replaceAll("^[~^,.:!();\'\"\\s]+", "").split("[~^,.:!();\'\"\\s]+");
+    // Greek spelling
+    // s = s.replaceAll("(ει|η|οι|υι|υ)","ι");
+    // s = s.replaceAll("ω","ο");
+    // s = s.replaceAll("αι","ε");
+
+    String[] words = s.replaceAll("^[~^,.:!();\'\"\\s]+", "").split("[~^,.:!();\'\"\\s]+");
+
+    int i = 0;
+    for (String word: words) {
+
+      // Stemming for greek words
+      word = word.replaceAll("(η|ησ|ην|ον|ου|ο|οσ|ικο|ιο|ηση|αμε|ει|εις|ιζει|ασ|μενοσ|μενη|μενεσ|σ|αση)$","");
+
+      // Stemming for english
+      word = word.replaceAll("(ious|ely|es|ice|ful|fully)$","");
+
+      words[i] = word;
+      i++;
+
+    }
+
+    return words;
   }
 
   private List<TrainSplit> buildSplits(List<String> args) {
@@ -109,6 +140,27 @@ public class TrainServlet extends HttpServlet {
 
     splits = getFolds(files);
     return splits;
+  }
+
+  private List<File> buildDataset(List<String> args) {
+
+    // Get the directory with the dataset, in which the pos/neg directories are
+    File trainDir = new File(args.get(0));
+
+    // System.out.println("[INFO]\tPerforming 10-fold cross-validation on data set: "+args.get(0));
+
+    // A list with all the files for splitting
+    List<File> files = new ArrayList<File>();
+
+    for (File dir: trainDir.listFiles()) {
+      List<File> dirList = Arrays.asList(dir.listFiles());
+
+      for (File f: dirList) {
+        files.add(f);
+	    }
+    }
+
+    return files;
   }
 
   public List<TrainSplit> getFolds(List<File> files) {
@@ -189,8 +241,6 @@ public class TrainServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    NaiveBayesClassifier classifier = new NaiveBayesClassifier();
-
     List<String> dataset = new ArrayList<String>();
 
     // First, set response content type. In this case we know it's JSON
@@ -207,8 +257,6 @@ public class TrainServlet extends HttpServlet {
 
     servletOutput.println("[INFO]\tStop words filtering = "+FILTER_STOP_WORDS);
 
-    servletOutput.println("[INFO]\tDataset length: " + dataset.size());
-
     // Build the train splits for 10-fold cross-validation
     List<TrainSplit> splits = buildSplits(dataset);
     double avgAccuracy = 0.0;
@@ -216,11 +264,12 @@ public class TrainServlet extends HttpServlet {
 
     for(TrainSplit split: splits) {
 
-      servletOutput.println("[INFO]\tFold " + fold);
+      System.out.println("[INFO]\tFold " + fold);
 
       // Use printSplit function for testing purposes only
-      //printSplit(split);
+      // printSplit(split);
 
+      NaiveBayesClassifier classifier = new NaiveBayesClassifier();
       double accuracy = 0.0;
 
       for(File file: split.train) {
@@ -245,54 +294,72 @@ public class TrainServlet extends HttpServlet {
       }
       accuracy = accuracy/split.test.size();
       avgAccuracy += accuracy;
-      servletOutput.println("[INFO]\tFold " + fold + " Accuracy: " + accuracy);
+      System.out.println("[INFO]\tFold " + fold + " Accuracy: " + accuracy);
       fold += 1;
     }
     avgAccuracy = avgAccuracy / numFolds;
-    servletOutput.println("[INFO]\tAccuracy: " + avgAccuracy);
+    System.out.println("[INFO]\tAccuracy: " + avgAccuracy);
 
-    List<Venue> venues = ofy().load().type(Venue.class).list();
+    NaiveBayesClassifier classifier = new NaiveBayesClassifier("final");
 
-    for (Venue venue: venues) {
-      // servletOutput.println("[INFO]\tVenue: " + venue.name);
+    List<File> datasetFiles = buildDataset(dataset);
 
-      List<Tip> tips = ofy().load().type(Tip.class).filter("venueId",venue.id).list();
+    int i = 0;
 
-      double count = 0; double rating = 0;
-
-      for (Tip tip: tips) {
-
-        if(!isNoise(tip.text)) {
-          String guess = classifier.classify(segmentWords(tip.text));
-
-          if (guess == "pos") {
-            rating++;
-          }
-
-          // servletOutput.println("[INFO]\t\tTip: " + tip.text + "\t\t polarity: " + guess);
-          count++;
-        }
+    for(File file: datasetFiles) {
+      i++;
+      String klass = file.getParentFile().getName();
+      List<String> words = readFile(file);
+      if (FILTER_STOP_WORDS) {
+        words = filterStopWords(words);
       }
-      if (count>0) {
-        rating = rating/count;
-
-        // servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
-
-        if (rating > 0.5) {
-          venue.venuetrackRating = "pos";
-        }
-        else {
-          venue.venuetrackRating = "neg";
-        }
-      }
-      else {
-        venue.venuetrackRating = "zeroTips";
-
-        // servletOutput.println("[INFO]\t zero useful tips");
-
-      }
-      ofy().save().entity(venue).now();
+      classifier.addExample(klass,words);
+      System.out.println("[INFO]\t Add example: " + i + " which is " + klass);
     }
+
+    ofy().save().entity(classifier).now();
+
+    // List<Venue> venues = ofy().load().type(Venue.class).list();
+    // for (Venue venue: venues) {
+    //   // servletOutput.println("[INFO]\tVenue: " + venue.name);
+    //
+    //   List<Tip> tips = ofy().load().type(Tip.class).filter("venueId",venue.id).list();
+    //
+    //   double count = 0; double rating = 0;
+    //
+    //   for (Tip tip: tips) {
+    //
+    //     if(!isNoise(tip.text)) {
+    //       String guess = classifier.classify(segmentWords(tip.text));
+    //
+    //       if (guess == "pos") {
+    //         rating++;
+    //       }
+    //
+    //       // servletOutput.println("[INFO]\t\tTip: " + tip.text + "\t\t polarity: " + guess);
+    //       count++;
+    //     }
+    //   }
+    //   if (count>0) {
+    //     rating = rating/count;
+    //
+    //     // servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
+    //
+    //     if (rating > 0.5) {
+    //       venue.venuetrackRating = "pos";
+    //     }
+    //     else {
+    //       venue.venuetrackRating = "neg";
+    //     }
+    //   }
+    //   else {
+    //     venue.venuetrackRating = "zeroTips";
+    //
+    //     // servletOutput.println("[INFO]\t zero useful tips");
+    //
+    //   }
+    //   ofy().save().entity(venue).now();
+    // }
 
     // Close the output session
     servletOutput.close();

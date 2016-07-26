@@ -1,10 +1,14 @@
 package com.fsqdataapp;
 
+import com.googlecode.objectify.annotation.*;
 import java.util.*;
 import java.util.regex.*;
 import java.io.*;
 
+@Entity
 public class NaiveBayesClassifier {
+
+  @Id public String id;
 
   int posCount = 0;
 
@@ -15,6 +19,12 @@ public class NaiveBayesClassifier {
   HashMap<String,Integer> negHash = new HashMap<String,Integer>();
 
   HashSet<String> voc = new HashSet<String>();
+
+  public NaiveBayesClassifier() {  }
+
+  public NaiveBayesClassifier(String givenId) {
+    id = givenId;
+  }
 
   public void addExample(String klass, List<String> words) {
    if(klass.equalsIgnoreCase("pos")) {

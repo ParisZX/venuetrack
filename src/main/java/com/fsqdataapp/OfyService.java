@@ -8,6 +8,7 @@ public class OfyService {
     static {
         factory().register(Venue.class);
         factory().register(Tip.class);
+        factory().register(NaiveBayesClassifier.class);
     }
 
     public static Objectify ofy() {
