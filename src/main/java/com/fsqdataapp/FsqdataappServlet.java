@@ -99,11 +99,6 @@ public class FsqdataappServlet extends HttpServlet {
 
           venue.lat = venue.location.lat; venue.lng = venue.location.lng;
           if (venue.lat < MAX_LAT && venue.lat > MIN_LAT && venue.lng < MAX_LNG && venue.lng > MIN_LNG) {
-            // save the final venuetrack venue...
-            ofy().save().entity(venue).now();
-
-            // ...and print the output (optionally, for testing)
-            servletOutput.println(venue.print());
 
             // let's get the tips for each venue. First, prepare the request url for foursquare...
             URL tipsUrl = new URL("https://api.foursquare.com/v2/venues/" + venue.id + "/tips?sort=recent&limit=100"+token);
@@ -118,6 +113,9 @@ public class FsqdataappServlet extends HttpServlet {
             List<Tip> tips = new ArrayList<Tip>();
             tips = newObj.response.tips.items;
 
+            double count = 0; double rating = 0;
+            NaiveBayesClassifier classifier = ofy().load().type(NaiveBayesClassifier.class).id("final").now();
+
             for (Tip tip : tips) {
 
               // define the foreign key for the tip a.k.a. where the tip belongs
@@ -128,7 +126,43 @@ public class FsqdataappServlet extends HttpServlet {
 
               // ...and print the output (optionally, for testing)
               // servletOutput.println(tip.print());
+
+              if(!isNoise(tip.text)) {
+                String guess = classifier.classify(segmentWords(tip.text));
+
+                if (guess == "pos") {
+                  rating++;
+                }
+
+                servletOutput.println("[INFO]\t\tTip: " + tip.text + "\t\t polarity: " + guess);
+                count++;
+              }
             }
+
+            if (count>0) {
+
+              rating = rating/count;
+              servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
+
+              if (rating > 0.5) {
+                venue.venuetrackRating = "pos";
+              }
+              else {
+                venue.venuetrackRating = "neg";
+              }
+            }
+            else {
+              venue.venuetrackRating = "zeroTips";
+              servletOutput.println("[INFO]\t zero useful tips");
+
+            }
+            
+            // save the final venuetrack venue...
+            ofy().save().entity(venue).now();
+
+            // ...and print the output (optionally, for testing)
+            servletOutput.println(venue.print());
+
           }
         }
       }
@@ -147,4 +181,97 @@ public class FsqdataappServlet extends HttpServlet {
   {
       // do nothing.
   }
+
+  public boolean isNoise(String text) {
+
+    // check for wifi password spamming
+    if( text.contains("4sqwifi.com") || text.contains("via WiFi Sherlock") || text.contains("Wi-fi:") || text.contains("passw") || text.contains("Wi-Fi :") ) {
+      return true;
+    }
+
+    // check for ads and offers
+    if ( text.contains("www.") || text.contains(".com") || text.contains(".gr") ) {
+      return true;
+    }
+
+    // remove cyrillic comments, the classifier cant use them
+    for ( int i = 0; i < text.length(); i++ ) {
+        if(Character.UnicodeBlock.of(text.charAt(i)).equals(Character.UnicodeBlock.CYRILLIC)) {
+            return true;
+        }
+    }
+
+    return false;
+  }
+
+  private List<String> segmentWords(String s) {
+    List<String> ret = new ArrayList<String>();
+
+    // Print string before segmentation
+    // System.out.println(s);
+
+    // Break string into words
+    for (String word: preprocessString(s)) {
+      if(word.length() > 0) {
+        ret.add(word);
+      }
+    }
+
+    // Print string after segmentation
+    // System.out.println(ret);
+
+    return ret;
+  }
+
+  private String[] preprocessString(String s) {
+    s = s.toLowerCase();
+
+    // remove numbers
+    // s = s.replaceAll("[0-9]","");
+
+    // remove prices
+    s = s.replaceAll("\\^(€+)","");
+
+    // remove greek diacritics cause not everybody uses them :D
+    s = s.replaceAll("ϋ","υ").replaceAll("ϊ","ι");
+    s = s.replaceAll("ΰ","υ").replaceAll("ΐ","ι");
+    s = s.replaceAll("ώ","ω").replaceAll("ύ","υ").replaceAll("ή","η").replaceAll("ί","ι").replaceAll("έ","ε").replaceAll("ό","ο").replaceAll("ά","α").replaceAll("ς","σ");
+
+    // Character '
+    s = s.replace("\\u0027","");
+
+    // Character &
+    s = s.replace("\\u0026","");
+
+    // Emojis
+    s = s.replaceAll(":\\)","☺").replaceAll(":-\\)","☺").replaceAll(":D","☺").replaceAll(":-D","☺").replaceAll(":P","☺").replaceAll(":-P","☺").replaceAll(";\\)","☺").replaceAll(";-\\)","☺");
+    s = s.replaceAll(";\\(","☹").replaceAll(";-\\(","☹").replaceAll(":\\(","☹").replaceAll(":-\\(","☹").replaceAll(":/","☹").replaceAll(":-/","☹");
+
+    // remove multiple occurances of the same character (ooooo's and aaaaa's, but no less that 3, so that we won't mess with words like good, book etc)
+    s = s.replaceAll("(.)\\1\\1+","$1");
+
+    // Greek spelling
+    // s = s.replaceAll("(ει|η|οι|υι|υ)","ι");
+    // s = s.replaceAll("ω","ο");
+    // s = s.replaceAll("αι","ε");
+
+    String[] words = s.replaceAll("^[~^,.:!();\'\"\\s]+", "").split("[~^,.:!();\'\"\\s]+");
+
+    int i = 0;
+    for (String word: words) {
+
+      // Stemming for greek words
+      word = word.replaceAll("(η|ησ|ην|ον|ου|ο|οσ|ικο|ιο|ηση|αμε|ει|εις|ιζει|ασ|μενοσ|μενη|μενεσ|σ|αση)$","");
+
+      // Stemming for english
+      word = word.replaceAll("(ious|ely|es|ice|ful|fully)$","");
+
+      words[i] = word;
+      i++;
+
+    }
+
+    return words;
+  }
+
 }

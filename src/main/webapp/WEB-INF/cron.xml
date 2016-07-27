@@ -5,9 +5,4 @@
     <description>Calls the webpage /fsqdataapp every 10 minutes</description>
     <schedule>every 10 minutes</schedule>
   </cron>
-  <cron>
-    <url>/train</url>
-    <description>Calls the webpage /train every 72 hours</description>
-    <schedule>every 72 hours</schedule>
-  </cron>
 </cronentries>

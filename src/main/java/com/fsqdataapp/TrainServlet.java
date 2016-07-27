@@ -217,28 +217,6 @@ public class TrainServlet extends HttpServlet {
     }
   }
 
-  public boolean isNoise(String text) {
-
-    // check for wifi password spamming
-    if( text.contains("4sqwifi.com") || text.contains("via WiFi Sherlock") || text.contains("Wi-fi:") || text.contains("passw") || text.contains("Wi-Fi :") ) {
-      return true;
-    }
-
-    // check for ads and offers
-    if ( text.contains("www.") || text.contains(".com") || text.contains(".gr") ) {
-      return true;
-    }
-
-    // remove cyrillic comments, the classifier cant use them
-    for ( int i = 0; i < text.length(); i++ ) {
-        if(Character.UnicodeBlock.of(text.charAt(i)).equals(Character.UnicodeBlock.CYRILLIC)) {
-            return true;
-        }
-    }
-
-    return false;
-  }
-
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     List<String> dataset = new ArrayList<String>();
@@ -258,47 +236,47 @@ public class TrainServlet extends HttpServlet {
     servletOutput.println("[INFO]\tStop words filtering = "+FILTER_STOP_WORDS);
 
     // Build the train splits for 10-fold cross-validation
-    List<TrainSplit> splits = buildSplits(dataset);
-    double avgAccuracy = 0.0;
-    int fold = 0;
-
-    for(TrainSplit split: splits) {
-
-      System.out.println("[INFO]\tFold " + fold);
-
-      // Use printSplit function for testing purposes only
-      // printSplit(split);
-
-      NaiveBayesClassifier classifier = new NaiveBayesClassifier();
-      double accuracy = 0.0;
-
-      for(File file: split.train) {
-        String klass = file.getParentFile().getName();
-        List<String> words = readFile(file);
-        if (FILTER_STOP_WORDS) {
-          words = filterStopWords(words);
-        }
-        classifier.addExample(klass,words);
-      }
-
-      for (File file : split.test) {
-        String klass = file.getParentFile().getName();
-        List<String> words = readFile(file);
-        if (FILTER_STOP_WORDS) {
-          words = filterStopWords(words);
-        }
-        String guess = classifier.classify(words);
-        if(klass.equals(guess)) {
-          accuracy++;
-        }
-      }
-      accuracy = accuracy/split.test.size();
-      avgAccuracy += accuracy;
-      System.out.println("[INFO]\tFold " + fold + " Accuracy: " + accuracy);
-      fold += 1;
-    }
-    avgAccuracy = avgAccuracy / numFolds;
-    System.out.println("[INFO]\tAccuracy: " + avgAccuracy);
+    // List<TrainSplit> splits = buildSplits(dataset);
+    // double avgAccuracy = 0.0;
+    // int fold = 0;
+    //
+    // for(TrainSplit split: splits) {
+    //
+    //   servletOutput.println("[INFO]\tFold " + fold);
+    //
+    //   // Use printSplit function for testing purposes only
+    //   // printSplit(split);
+    //
+    //   NaiveBayesClassifier classifier = new NaiveBayesClassifier();
+    //   double accuracy = 0.0;
+    //
+    //   for(File file: split.train) {
+    //     String klass = file.getParentFile().getName();
+    //     List<String> words = readFile(file);
+    //     if (FILTER_STOP_WORDS) {
+    //       words = filterStopWords(words);
+    //     }
+    //     classifier.addExample(klass,words);
+    //   }
+    //
+    //   for (File file : split.test) {
+    //     String klass = file.getParentFile().getName();
+    //     List<String> words = readFile(file);
+    //     if (FILTER_STOP_WORDS) {
+    //       words = filterStopWords(words);
+    //     }
+    //     String guess = classifier.classify(words);
+    //     if(klass.equals(guess)) {
+    //       accuracy++;
+    //     }
+    //   }
+    //   accuracy = accuracy/split.test.size();
+    //   avgAccuracy += accuracy;
+    //   servletOutput.println("[INFO]\tFold " + fold + " Accuracy: " + accuracy);
+    //   fold += 1;
+    // }
+    // avgAccuracy = avgAccuracy / numFolds;
+    // servletOutput.println("[INFO]\tAccuracy: " + avgAccuracy);
 
     NaiveBayesClassifier classifier = new NaiveBayesClassifier("final");
 
@@ -314,52 +292,10 @@ public class TrainServlet extends HttpServlet {
         words = filterStopWords(words);
       }
       classifier.addExample(klass,words);
-      System.out.println("[INFO]\t Add example: " + i + " which is " + klass);
+      // System.out.println("[INFO]\t Add example: " + i + " which is " + klass);
     }
 
     ofy().save().entity(classifier).now();
-
-    // List<Venue> venues = ofy().load().type(Venue.class).list();
-    // for (Venue venue: venues) {
-    //   // servletOutput.println("[INFO]\tVenue: " + venue.name);
-    //
-    //   List<Tip> tips = ofy().load().type(Tip.class).filter("venueId",venue.id).list();
-    //
-    //   double count = 0; double rating = 0;
-    //
-    //   for (Tip tip: tips) {
-    //
-    //     if(!isNoise(tip.text)) {
-    //       String guess = classifier.classify(segmentWords(tip.text));
-    //
-    //       if (guess == "pos") {
-    //         rating++;
-    //       }
-    //
-    //       // servletOutput.println("[INFO]\t\tTip: " + tip.text + "\t\t polarity: " + guess);
-    //       count++;
-    //     }
-    //   }
-    //   if (count>0) {
-    //     rating = rating/count;
-    //
-    //     // servletOutput.println("[INFO]\t Rating: " + venue.rating + " and Venuetrack Rating: " + rating);
-    //
-    //     if (rating > 0.5) {
-    //       venue.venuetrackRating = "pos";
-    //     }
-    //     else {
-    //       venue.venuetrackRating = "neg";
-    //     }
-    //   }
-    //   else {
-    //     venue.venuetrackRating = "zeroTips";
-    //
-    //     // servletOutput.println("[INFO]\t zero useful tips");
-    //
-    //   }
-    //   ofy().save().entity(venue).now();
-    // }
 
     // Close the output session
     servletOutput.close();
