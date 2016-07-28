@@ -9,6 +9,14 @@
             <url-pattern>/*</url-pattern>
     </filter-mapping>
     <servlet>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+        <init-param>
+            <param-name>services</param-name>
+            <param-value>com.fsqdataapp.Endpoints</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
         <servlet-name>fsqdataapp</servlet-name>
         <servlet-class>com.fsqdataapp.FsqdataappServlet</servlet-class>
     </servlet>
@@ -20,6 +28,10 @@
         <servlet-name>train</servlet-name>
         <servlet-class>com.fsqdataapp.TrainServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>fsqdataapp</servlet-name>
         <url-pattern>/fsqdataapp</url-pattern>
@@ -35,4 +47,13 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>app</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>

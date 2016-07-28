@@ -1,4 +1,12 @@
-	var myApp = angular.module('myApp',['ngRoute','venuetrackServices','sidebar','navbar']);
+  function startApp() {
+
+      var ROOT = 'https://venuetrack.appspot.com/_ah/api';
+      gapi.client.load('venuetrackEndpoints', 'v1', function() {
+          angular.bootstrap(document, ["myApp"]);
+      }, ROOT);
+  }
+
+  var myApp = angular.module('myApp',['ngRoute','venuetrackServices','sidebar','navbar']);
 
 	myApp.controller('MainController', ['$scope', '$routeParams', 'venuesAPI' ,
 
@@ -8,15 +16,29 @@
 
 			  var allVenues; // var venues = []; var markers = []; var infoWindows = []; var map;
 
-	  		$scope.venues = venuesAPI.query(function(data) {
+	  		// $scope.venues = venuesAPI.query(function(data) {
+        //
+        //   $scope.venues = data;
+        //
+        //   allVenues = data;
+        //
+        //   for (var i in data)
+        //     if(data[i].id != null)
+		    //       createMarker(data[i]);
+        //
+        // });
 
-          $scope.venues = data;
+        $scope.venues = gapi.client.venuetrackEndpoints.endpoints.listVenues().execute(function(resp) {
 
-          allVenues = data;
+          $scope.venues = resp.items;
 
-          for (var i in data)
-            if(data[i].id != null)
-		          createMarker(data[i]);
+          $scope.$apply();
+
+          allVenues = resp.items;
+
+          for (var i in resp.items)
+            if(resp.items[i].id != null)
+  	          createMarker(resp.items[i]);
 
         });
 
