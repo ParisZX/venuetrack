@@ -1,6 +1,11 @@
   function startApp() {
 
+      // for production
       var ROOT = 'https://venuetrack.appspot.com/_ah/api';
+
+      // for dev
+      // var ROOT = 'http://localhost:8080/_ah/api';
+
       gapi.client.load('venuetrackEndpoints', 'v1', function() {
           angular.bootstrap(document, ["myApp"]);
       }, ROOT);

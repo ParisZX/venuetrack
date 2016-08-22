@@ -5,4 +5,9 @@
     <description>Calls the webpage /fsqdataapp every 10 minutes</description>
     <schedule>every 10 minutes</schedule>
   </cron>
+  <cron>
+    <url>/keepwake</url>
+    <description>Calls the webpage /keepwake every 1 minute</description>
+    <schedule>every 1 minutes</schedule>
+  </cron>
 </cronentries>

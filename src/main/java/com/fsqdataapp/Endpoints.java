@@ -29,4 +29,25 @@ public class Endpoints {
     return ofy().load().type(Venue.class).list();
   }
 
+  // public List<Marker> listMarkers() {
+  //
+  //   List<Venue> venues = ofy().load().type(Venue.class).list();
+  //   List<Marker> markers = new ArrayList<Marker>();
+  //
+  //   for(Venue venue : venues) {
+  //     Marker newMarker = new Marker();
+  //     markers.add(newMarker);
+  //   }
+  //
+  //   return markers;
+  //
+  // }
+
 }
+
+// public class Marker {
+//   public String id;
+//   // public
+//
+//   public Marker() {}
+// }

@@ -21,8 +21,8 @@
         <servlet-class>com.fsqdataapp.FsqdataappServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>endpoints</servlet-name>
-        <servlet-class>com.fsqdataapp.EndpointsServlet</servlet-class>
+        <servlet-name>keepwake</servlet-name>
+        <servlet-class>com.fsqdataapp.KeepWakeServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>train</servlet-name>
@@ -37,8 +37,8 @@
         <url-pattern>/fsqdataapp</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>endpoints</servlet-name>
-        <url-pattern>/endpoints</url-pattern>
+        <servlet-name>keepwake</servlet-name>
+        <url-pattern>/keepwake</url-pattern>
     </servlet-mapping>
         <servlet-mapping>
             <servlet-name>train</servlet-name>
